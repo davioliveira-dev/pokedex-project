@@ -4,7 +4,7 @@
   "port": 5432,
   "username": "postgres",
   "password": "root",
-  "database": "pokedex",
+  "database": "poke",
   "entities": [
      "src/entities/*.ts"
   ],
