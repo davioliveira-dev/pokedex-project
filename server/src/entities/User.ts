@@ -1,10 +1,11 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
   BeforeInsert,
   BeforeUpdate,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
+
 import bcrypt from 'bcrypt';
 
 @Entity('users')
@@ -17,6 +18,18 @@ class User {
 
   @Column()
   password: string;
+
+  @Column('jsonb')
+  pokemons: [{
+    pokeId: number;
+    name: string;
+    height: number;
+    weight: number;
+    sprite: string;
+    abilities: Object;
+    stats: Object;
+    type: Object;
+  }]
 
   @BeforeInsert()
   @BeforeUpdate()
