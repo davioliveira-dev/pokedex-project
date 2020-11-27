@@ -1,8 +1,9 @@
 import {Request, Response} from 'express';
-import {getRepository} from 'typeorm';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+
 import User from '../entities/User';
+import bcrypt from 'bcrypt';
+import {getRepository} from 'typeorm';
+import jwt from 'jsonwebtoken';
 
 class AuthController {
   static async authenticate(req: Request, res: Response) {
@@ -15,9 +16,9 @@ class AuthController {
       return res.status(401).json({message: 'Unauthorized, user not found!'});
     }
 
-    const isValidPasssword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, user.password);
 
-    if (!isValidPasssword) {
+    if (!isValidPassword) {
       return res.status(401).json({
         message: 'Unauthorized, password does not match',
       });
