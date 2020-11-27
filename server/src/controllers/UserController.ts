@@ -1,12 +1,13 @@
 import {Request, Response} from 'express';
-import {getRepository} from 'typeorm';
+
 import User from '../entities/User';
+import getPokemonsFromApi from '../services/getPokemonsFromApi';
+import {getRepository} from 'typeorm';
 
 class UserController {
   static async store(req: Request, res:Response) {
-    const userRepository = getRepository(User);
-
     const {email, password} = req.body;
+    const userRepository = getRepository(User);
 
     const usersExists = await userRepository.findOne({where: {email}});
 
@@ -14,7 +15,8 @@ class UserController {
       return res.status(409).send({message: 'E-mail already registered'});
     }
 
-    const user = userRepository.create({email, password});
+    const pokemons = await getPokemonsFromApi();
+    const user = userRepository.create({email, password, pokemons});
     await userRepository.save(user);
 
     return res.status(201).json(user);
