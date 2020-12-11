@@ -1,12 +1,36 @@
-import {config} from 'dotenv';
-import 'reflect-metadata';
-import http from 'http';
-import app from './app';
-import './database/connect';
-config();
+import {Express} from 'express-serve-static-core';
+import cors from 'cors';
+import express from 'express';
+import queueConfig from './config/queueConfig';
+import routes from './routes';
 
-const server = new http.Server(app);
+class Server {
+  private app: Express;
 
-server.listen(process.env.PORT || 3333, () => {
-  return console.log('Server Started');
-});
+  constructor() {
+    this.app = express();
+    this.config();
+    this.routerConfig();
+  }
+
+  private config() {
+    this.app.use(cors());
+    this.app.use(express.json());
+    this.app.use(queueConfig);
+  }
+
+  private routerConfig() {
+    this.app.use(routes);
+  }
+
+  public start = (port: number) => {
+    return new Promise((resolve, reject) => {
+      this.app.listen(port, () => {
+        resolve(port);
+      }).on('error', (err: Object) => reject(err));
+    });
+  }
+}
+
+export default Server;
+

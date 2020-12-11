@@ -1,13 +1,15 @@
-import cors from 'cors';
-import express from 'express';
-import queueConfig from './config/queueConfig';
-import routes from './routes';
+import 'reflect-metadata';
+import './database/connect';
 
-const app = express();
+import {config} from 'dotenv';
+import server from './server';
 
-app.use(cors());
-app.use(express.json());
-app.use(queueConfig);
-app.use(routes);
+config();
 
-export default app;
+const port = parseInt(process.env.PORT || '3333');
+
+const starter = new server().start(port)
+    .then(() => console.log(`Running on port ${port}`))
+    .catch((error) => console.log(error.message));
+
+export default starter;
